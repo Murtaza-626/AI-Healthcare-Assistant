@@ -1,0 +1,15 @@
+# Environment secrets (NEVER commit this)
+.env
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ML Large artifacts / datasets (keep repositories lightweight)
+*.csv
+artifacts/*.pkl  # Uncomment if model files exceed GitHub file limits
