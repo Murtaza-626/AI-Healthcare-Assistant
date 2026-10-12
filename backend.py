@@ -99,7 +99,7 @@ if not GROQ_API_KEY:
 # Initializing the synchronous Groq client
 groq_client = Groq(api_key=GROQ_API_KEY)
 
-# --- DEFINE THE INPUT SCHEMA ---
+# Defining the Input Schema
 class SummaryRequest(BaseModel):
     symptoms: list[str]
     predicted_disease: str
@@ -197,7 +197,7 @@ def create_patient_record(payload: PatientRecordCreate, db: Session = Depends(ge
             doctor_exists = models.Doctor(
                 id=payload.doctor_id,
                 name="Dr. Default Clinician",
-                email=f"doctor_{str(id)[:8]}@hospital.org",
+                email=f"doctor_{str(payload.doctor_id)[:8]}@hospital.org",
                 password_hash="argon2_hashed_placeholder"
             )
             db.add(doctor_exists)
