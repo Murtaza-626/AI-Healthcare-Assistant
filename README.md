@@ -1,108 +1,53 @@
-AI Healthcare Assistant
-An AI-powered healthcare assistant that helps analyze patient symptoms, predict possible diseases, read laboratory reports, generate clinical summaries, and store consultation records.
+# AI Healthcare Assistant
 
-Important: This project is created for educational and research purposes. It is not a replacement for a qualified doctor, medical diagnosis, or professional healthcare advice.
+An AI-powered healthcare application that predicts possible diseases from patient symptoms, extracts information from laboratory reports, generates clinical summaries in English and Urdu, and stores patient consultation records.
 
-Introduction
-The AI Healthcare Assistant is a backend healthcare application built with Python and FastAPI.
+**Note:** This project is developed for educational and research purposes. It is not a substitute for professional medical diagnosis or advice.
 
-The system combines machine learning, artificial intelligence, OCR, and a PostgreSQL database to support doctors and healthcare professionals during patient consultations.
+## Features
 
-A user can provide patient symptoms, and the system can:
+### 1. Disease Prediction
 
-Predict a possible disease.
-Calculate a prediction risk percentage.
-Upload and read medical laboratory reports.
-Extract test names and values from report images.
-Generate a short clinical summary for doctors.
-Generate a simple Urdu explanation for patients.
-Store patient information and consultation history.
-Retrieve previously saved patient records.
-The goal of this project is to make healthcare data easier to understand and help doctors organize patient information more efficiently.
+* Predicts possible diseases based on patient symptoms.
+* Returns a prediction percentage.
+* Uses a trained XGBoost classification model.
 
-Main Features
-1. Disease Prediction
-The system uses a trained machine learning model to analyze symptoms and predict a possible disease.
+### 2. Laboratory Report Analysis
 
-The prediction response includes:
+* Accepts laboratory report images in PNG, JPG, and JPEG formats.
+* Uses Google Gemini API to extract test names, values, and units.
+* Returns extracted information as structured data.
 
-Predicted disease
-Risk or confidence percentage
-The model is trained using an XGBoost classification algorithm.
+### 3. AI Clinical Summaries
 
-2. Medical Report Analysis
-Users can upload a medical laboratory report as an image.
+* Uses Groq API to generate clinical summaries.
+* Provides an English summary for doctors.
+* Provides a simple Urdu explanation for patients.
 
-The system uses an AI vision model to extract:
+### 4. Patient Record Management
 
-Medical test names
-Measured values
-Units
-Other useful laboratory information
-Supported image formats:
+* Stores doctor and patient information.
+* Saves consultation details, symptoms, predictions, laboratory results, and clinical summaries.
+* Retrieves previously saved patient records.
 
-PNG
-JPG
-JPEG
-3. AI Clinical Summary
-The application generates summaries based on:
+## Technology Stack
 
-Patient symptoms
-Predicted disease
-Prediction risk percentage
-It provides two types of summaries:
+| Category         | Technologies                                 |
+| ---------------- | -------------------------------------------- |
+| Backend          | Python, FastAPI, Uvicorn, Pydantic           |
+| Machine Learning | XGBoost, Scikit-learn, NumPy, Pandas, Joblib |
+| AI Services      | Google Gemini API, Groq API                  |
+| Database         | PostgreSQL, SQLAlchemy, JSONB                |
+| Image Processing | Pillow                                       |
 
-A professional English summary for doctors
-A simple Urdu summary for patients
-This makes medical information easier to understand for both healthcare professionals and patients.
+## Project Structure (Implemented Yet)
 
-4. Patient Record Management
-The project uses PostgreSQL and SQLAlchemy to store healthcare records.
-
-The database can store:
-
-Doctor information
-Patient information
-Consultation details
-Patient symptoms
-Disease predictions
-Risk percentages
-Laboratory report data
-AI-generated clinical summaries
-5. Consultation History
-Saved patient records can be retrieved through the API.
-
-This allows doctors to review previous consultations and patient information.
-
-Technology Stack
-Backend
-Python
-FastAPI
-Uvicorn
-Pydantic
-Machine Learning
-XGBoost
-Scikit-learn
-NumPy
-Pandas
-Joblib
-Artificial Intelligence
-Google Gemini API for laboratory report analysis
-Groq API for AI-generated summaries
-Database
-PostgreSQL
-SQLAlchemy
-PostgreSQL JSONB fields
-Image Processing
-Pillow
-Project Structure
+```text
 AI-Healthcare-Assistant/
-│
 ├── artifacts/
 │   ├── disease_model.pkl
 │   ├── label_encoder.pkl
 │   └── symptom_features.json
-│
 ├── backend.py
 ├── database.py
 ├── init_db.py
@@ -113,44 +58,57 @@ AI-Healthcare-Assistant/
 ├── sample_lab_report.png
 ├── .gitignore
 └── README.md
-File Description
-File	Description
-backend.py	Contains the FastAPI application and API endpoints
-database.py	Creates the SQLAlchemy database connection
-models.py	Defines the database tables and relationships
-init_db.py	Creates the PostgreSQL database tables
-model_training.py	Trains and saves the disease prediction model
-model_training.ipynb	Notebook version of the model training process
-report.py	Generates a sample laboratory report image
-sample_lab_report.png	Example report image for testing OCR
-artifacts/	Stores the trained machine learning model files
-API Endpoints
-Predict a Disease
-POST /predict
-This endpoint accepts a list of symptom values and returns the predicted disease and risk percentage.
+```
+
+### Main Files
+
+| File                   | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| `backend.py`           | FastAPI application and API endpoints                |
+| `database.py`          | Database connection and session management           |
+| `models.py`            | SQLAlchemy database models                           |
+| `init_db.py`           | Database table initialization                        |
+| `model_training.py`    | Trains and saves the disease prediction model        |
+| `model_training.ipynb` | Notebook for model training                          |
+| `report.py`            | Generates a sample laboratory report                 |
+| `artifacts/`           | Stores trained model files and symptom configuration |
+
+## API Endpoints
+
+### 1. Predict a Disease
+
+**`POST /predict`**
+
+Predicts a possible disease from symptom values.
 
 Example request:
 
+```json
 {
   "symptoms": [1, 0, 1, 0, 1]
 }
+```
+
 Example response:
 
+```json
 {
   "disease": "Example Disease",
   "risk_percentage": 87.45
 }
-Upload a Laboratory Report
-POST /upload-report
-This endpoint accepts a laboratory report image and extracts medical test information from it.
+```
 
-Supported file types:
+### 2. Upload a Laboratory Report
 
-PNG
-JPG
-JPEG
+**`POST /upload-report`**
+
+Uploads a laboratory report image and extracts medical test information.
+
+Supported formats: PNG, JPG, JPEG.
+
 Example response:
 
+```json
 {
   "status": "success",
   "data": {
@@ -158,50 +116,74 @@ Example response:
     "Glucose": "110 mg/dL"
   }
 }
-Generate an AI Clinical Summary
-POST /generate-summary
-This endpoint generates an English summary for doctors and an Urdu summary for patients.
+```
+
+### 3. Generate Clinical Summaries
+
+**`POST /generate-summary`**
+
+Generates English and Urdu summaries from patient symptoms and prediction information.
 
 Example request:
 
+```json
 {
-  "symptoms": [
-    "fever",
-    "headache",
-    "body pain"
-  ],
+  "symptoms": ["fever", "headache", "body pain"],
   "predicted_disease": "Flu",
   "risk_percentage": 82.5
 }
-Example response:
+```
 
-{
-  "status": "success",
-  "data": {
-    "doctor_english_summary": "The symptoms are consistent with a possible flu infection.",
-    "patient_urdu_summary": "آپ کی علامات فلو سے ملتی جلتی ہیں۔ بہتر تشخیص کے لیے ڈاکٹر سے مشورہ کریں۔"
-  }
-}
-Create a Patient Record
-POST /patient-records
-This endpoint saves patient information, symptoms, predictions, laboratory results, and clinical summaries in the database.
+### 4. Create a Patient Record
 
-Get Patient Records
-GET /patient-records
-This endpoint retrieves saved consultation records.
+**`POST /patient-records`**
+
+Saves patient information, symptoms, consultation details, predictions, laboratory results, and clinical summaries.
+
+### 5. Retrieve Patient Records
+
+**`GET /patient-records`**
+
+Retrieves saved patient consultation records.
 
 Optional query parameters:
 
-skip
-limit
+* `skip`: Number of records to skip.
+* `limit`: Maximum number of records to return.
+
 Example:
 
+```http
 GET /patient-records?skip=0&limit=20
-Requirements
-Before running the project, make sure the following software is installed:
+```
 
-Python 3.9 or newer
-PostgreSQL
-Git
-A Google Gemini API key
-A Groq API key
+## Requirements
+
+* Python 3.13.5 or newer
+* PostgreSQL
+* Git
+* Google Gemini API key
+* Groq API key
+
+## Setup and Usage
+
+1. Clone the repository.
+2. Create and activate a Python virtual environment.
+3. Install the required dependencies.
+4. Configure PostgreSQL and the required environment variables.
+5. Initialize the database tables.
+6. Start the FastAPI server.
+
+Run the application:
+
+```bash
+python backend.py
+```
+
+Open the interactive API documentation at:
+
+`http://127.0.0.1:8000/docs`
+
+## Disclaimer
+
+Disease predictions and AI-generated summaries are for educational and research purposes only. They must not be treated as confirmed diagnoses or used as a substitute for professional medical judgment.
