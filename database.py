@@ -1,7 +1,5 @@
-"""
-database.py
-SQLAlchemy connection and session lifecycle management.
-"""
+# SQLAlchemy connection and session lifecycle management.
+
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
