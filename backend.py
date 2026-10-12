@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from fastapi import FastAPI, Request, File, UploadFile, HTTPException, Depends
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
 import os
 import json
 import joblib
