@@ -117,7 +117,7 @@ class PatientRecordCreate(BaseModel):
     lab_results: Optional[Dict[str, Any]] = None
     clinical_summary: Optional[Dict[str, Any]] = None
 
-# --- NEW ROUTE (PHASE 2, PART 4) ---
+# NEW ROUTE (PHASE 2, PART 4) 
 @app.post("/generate-summary")
 async def generate_summary(payload: SummaryRequest):
 
@@ -138,13 +138,13 @@ async def generate_summary(payload: SummaryRequest):
             f"Risk Probability: {payload.risk_percentage}%"
         )
 
-        # 3. Call the Llama 3.1 8B Instant model via Groq API
+        # 3. Call the gpt-oss-120b Instant model via Groq API
         chat_completion = groq_client.chat.completions.create(
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            model="openai/gpt-oss-20b",
+            model="openai/gpt-oss-120b",
             response_format={"type": "json_object"}, # Forces guaranteed JSON output
             temperature=0.3, # Low temperature for factual, non-creative clinical outputs
         )

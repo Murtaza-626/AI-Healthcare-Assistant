@@ -3,9 +3,11 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, accuracy_score, top_k_accuracy_score
 from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
 import json
+from sklearn.linear_model import LogisticRegression
 
 # 3. Load datasets
 train_df = pd.read_csv('Training.csv')
@@ -47,7 +49,24 @@ model = XGBClassifier(
     eval_metric='mlogloss',
     random_state=42
 )
+
+# model = LogisticRegression(
+#     multi_class='multinomial',  # Explicitly handles multi-class targets (like multi:softprob)
+#     solver='lbfgs',             # Standard solver that works well for most datasets
+#     max_iter=1000,              # Increased from 100 to ensure convergence
+#     random_state=42
+# )
+
 model.fit(X_train, y_train)
+
+# model = RandomForestClassifier(
+#     n_estimators=100,
+#     max_depth=5,
+#     criterion='log_loss',  # Equivalent to minimizing log loss / cross-entropy
+#     random_state=42,
+#     n_jobs=-1              # Optional: Uses all CPU cores to speed up training
+# )
+# model.fit(X_train, y_train)
 
 # 7. Model Evaluation
 y_pred = model.predict(X_test)
@@ -62,16 +81,16 @@ print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred, target_names=label_encoder.classes_))
 
 # 1. Setting the output directory to an 'artifacts' folder 
-OUTPUT_DIR = 'artifacts'
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# OUTPUT_DIR = 'artifacts'
+# os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# 2. Saving the model and label encoder locally
-joblib.dump(model, os.path.join(OUTPUT_DIR, 'disease_model.pkl'))
-joblib.dump(label_encoder, os.path.join(OUTPUT_DIR, 'label_encoder.pkl'))
+# # 2. Saving the model and label encoder locally
+# joblib.dump(model, os.path.join(OUTPUT_DIR, 'disease_model.pkl'))
+# joblib.dump(label_encoder, os.path.join(OUTPUT_DIR, 'label_encoder.pkl'))
 
 
-# 3. Save the symptom feature names locally as a JSON file
-with open(os.path.join(OUTPUT_DIR, 'symptom_features.json'), 'w') as f:
-    json.dump(feature_names, f)
+# # 3. Save the symptom feature names locally as a JSON file
+# with open(os.path.join(OUTPUT_DIR, 'symptom_features.json'), 'w') as f:
+#     json.dump(feature_names, f)
 
-print(f"\nArtifacts successfully serialized and saved to local folder: {os.path.abspath(OUTPUT_DIR)}")
+# print(f"\nArtifacts successfully serialized and saved to local folder: {os.path.abspath(OUTPUT_DIR)}")

@@ -5,7 +5,7 @@ Generates a clean synthetic lab report image to test the Phase 2 OCR endpoint.
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-def create_lab_report(output_filename: str = "sample_lab_report.png") -> str:
+def create_lab_report(output_filename: str = "sample_lab_report2.png") -> str:
     # 1. Canvas dimensions and high-contrast clinical color palette
     width, height = 900, 1100
     background_color = (255, 255, 255)
